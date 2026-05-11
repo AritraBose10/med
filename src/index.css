@@ -1082,6 +1082,9 @@ body.emergency-mode .bottom-nav {
 }
 
 /* ─── Quick Actions bar ───────────────────────── */
+/* ─── Quick Actions bar ──────────────────────────
+   5-item flat row: flex:1 side items + fixed AI btn.
+   Max total on 375px = 375px → never overflows.     */
 .quick-actions {
   position: fixed;
   bottom: var(--bnav-h);
@@ -1091,42 +1094,42 @@ body.emergency-mode .bottom-nav {
   max-width: 480px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px 14px;
+  padding: 6px 10px;
   background: rgba(7, 16, 31, 0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--border);
   z-index: 290;
-  gap: 8px;
 }
 
-.qa-pair {
+/* Side action items — equal width, stacked */
+.qa-item {
+  flex: 1;
   display: flex;
-  gap: 6px;
-}
-
-.qa-btn {
-  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 7px;
-  padding: 7px 10px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  gap: 4px;
+  padding: 5px 2px;
+  background: none;
+  border: none;
   cursor: pointer;
-  transition: background 0.15s;
-  text-align: left;
-  flex-shrink: 0;
+  transition: opacity 0.15s;
+  min-width: 0;
 }
-.qa-btn:hover { background: var(--card-hover); }
+.qa-item:active { opacity: 0.65; }
 
-.qa-btn-label  { font-size: 0.6875rem; font-weight: 600; color: var(--text);           font-family: var(--font-display); line-height: 1.2; }
-.qa-btn-sub    { font-size: 0.5875rem; color: var(--text-secondary); line-height: 1.2; }
+.qa-item-label {
+  font-size: 0.5875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-family: var(--font);
+}
 
+/* Centre AI button */
 .qa-ai-btn {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--blue);
   border: none;
@@ -1137,13 +1140,14 @@ body.emergency-mode .bottom-nav {
   justify-content: center;
   gap: 1px;
   color: #fff;
-  box-shadow: 0 4px 16px rgba(61, 107, 255, 0.45), 0 0 0 3px rgba(61, 107, 255, 0.15);
-  transition: transform 0.15s, box-shadow 0.15s;
   flex-shrink: 0;
+  margin: 0 6px;
+  box-shadow: 0 4px 14px rgba(61, 107, 255, 0.45), 0 0 0 3px rgba(61, 107, 255, 0.15);
+  transition: transform 0.15s, box-shadow 0.15s;
 }
-.qa-ai-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(61,107,255,0.55), 0 0 0 4px rgba(61,107,255,0.2); }
+.qa-ai-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(61,107,255,0.55), 0 0 0 4px rgba(61,107,255,0.2); }
 .qa-ai-btn:active { transform: scale(0.94); }
-.qa-ai-label { font-size: 0.5625rem; font-weight: 800; letter-spacing: 0.04em; }
+.qa-ai-label { font-size: 0.525rem; font-weight: 800; letter-spacing: 0.04em; }
 
 /* Disease risk tags */
 .risk-tag {
@@ -1176,4 +1180,111 @@ body.emergency-mode .bottom-nav {
 body.emergency-mode .quick-actions {
   background: rgba(9, 5, 10, 0.96);
   border-top-color: rgba(239, 68, 68, 0.15);
+}
+
+/* ─── Loader / Splash screen ──────────────────── */
+@keyframes loaderBarGrow {
+  from { width: 0%;   }
+  to   { width: 100%; }
+}
+@keyframes loaderIconPulse {
+  0%,100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(61,107,255,0.4); }
+  50%     { transform: scale(1.06); box-shadow: 0 0 0 14px rgba(61,107,255,0); }
+}
+@keyframes loaderFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  transition: opacity 0.6s ease;
+}
+
+.loader-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 40%, rgba(61,107,255,0.12) 0%, transparent 70%);
+}
+
+.loader-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: loaderFadeIn 0.5s ease both;
+}
+
+.loader-icon-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--blue-dim);
+  border: 1.5px solid rgba(61,107,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: loaderIconPulse 2s ease-in-out infinite;
+}
+
+.loader-icon-inner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(61,107,255,0.5);
+}
+
+.loader-title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.loader-sub {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  margin-top: -8px;
+}
+
+.loader-bar-track {
+  width: 160px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 40px;
+  animation: loaderFadeIn 0.5s 0.3s ease both;
+}
+
+.loader-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--blue) 0%, var(--blue-light) 100%);
+  animation: loaderBarGrow 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.loader-hint {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  margin-top: 12px;
+  letter-spacing: 0.03em;
+  animation: loaderFadeIn 0.5s 0.5s ease both;
 }

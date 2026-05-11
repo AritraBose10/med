@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Loader           from './components/Loader';
 import DoctorProfile    from './components/DoctorProfile';
 import SearchBar        from './components/SearchBar';
 import StatsRow         from './components/StatsRow';
@@ -19,12 +20,15 @@ import BottomNav        from './components/BottomNav';
 
 function App() {
   const [isEmergency, setIsEmergency] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     document.body.classList.toggle('emergency-mode', isEmergency);
   }, [isEmergency]);
 
   return (
+    <>
+      {loading && <Loader onDone={() => setLoading(false)} />}
     <div className="app">
 
       {/* ── Doctor profile header (sticky) ──────── */}
@@ -97,6 +101,7 @@ function App() {
       <BottomNav />
 
     </div>
+    </>
   );
 }
 
