@@ -23,7 +23,7 @@ export default function Greeting() {
         {dateStr} &middot; {timeStr}
       </p>
       <h1 className="display font-bold" style={{ fontSize: '1.5rem', marginTop: 6, letterSpacing: '-0.02em' }}>
-        {getGreeting(now.getHours())}, Dr. Sarah
+        {getGreeting(now.getHours())}, Dr. Alex
       </h1>
       <p className="text-sm muted" style={{ marginTop: 5 }}>
         System optimal &mdash;&nbsp;
